@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ぺぺぺルーレット</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/common.css"  />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  <div id="roulette" style="margin: 100px;">
+    <!-- Use the component -->
+    <svg id="mysvg" viewBox="0 0 200 100"
+      @mousemove="drag($event)"
+      @mouseup="dragStop($event)">
+      <!-- パイの切れ端 -->
+      <g v-for="item, index in items">
+        <path
+          :fill="item.fill"
+          :d="item.d"
+          stroke="#d8d8d8"
+          stroke-width="0.5"
+          @mousedown="dragStart(index, $event)"
+          />
+        <text
+          :x="item.textX" :y="item.textY" text-anchor="middle"
+          user-select="none" dominant-baseline="central"
+          @mousedown="dragStart(index, $event)"
+          class="piText"
+          >{{item.text}}</text>
+      </g>
+      <!-- ドラッグ中のパイ型 -->
+      <path :fill="dragItem.fill"
+        stroke="#d8d8d8"
+        stroke-width="0.5"
+        opacity="0.5"
+        :d="dragItem.d"
+        />
+      <!-- 回転するフォーカス -->
+      <path
+        v-if="showFocus"
+        fill="#ffffff"
+        stroke="#d8d8d8"
+        stroke-width="0.5"
+        opacity="0.9"
+        :d="focusItem"
+        />
+      <!-- ルーレットスイッチ -->
+      <circle :cx="cx" :cy="cy" :r="sr" fill="#d8d8d8" stroke-width="0.5" stroke="white" @mouseup="switchRoulette" />
+      <!-- 現在の数値 -->
+      <text v-if="showCurrent" :x="cx" :y="cy" text-anchor="middle"
+        user-select="none" dominant-baseline="central"
+        @mouseup="switchRoulette">{{items[focusIndex].text}}</text>
+      <!-- 確定数字 -->
+      <text v-if="showFixedNum" class="fixedNum animated flash faster" :x="cx" :y="cy"
+      text-anchor="middle"
+        user-select="none" dominant-baseline="central" @mouseup="switchRoulette">{{items[focusIndex].text}}</text>
+    </svg>
+    <!-- 数字入力 -->
+    <center>
+      <input v-model.number="number" v-if="canEdit">
+    </center>
+  </div>
+  <script src="js/beep.js"></script>
+  <script src="js/color.js"></script>
+  <script src="js/path.js"></script>
+</body>
+</html>

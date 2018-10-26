@@ -1,0 +1,19 @@
+div {
+  border: #d0d0d0 10px;
+}
+svg {
+  user-select: none;
+}
+
+input {
+  font-size: 24px;
+  text-align: right;
+}
+
+.fixedNum {
+  animation-iteration-count: 3
+}
+
+.piText {
+  font-size: 6px;
+}
