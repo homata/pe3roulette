@@ -27,7 +27,7 @@
           :x="item.textX" :y="item.textY" text-anchor="middle"
           user-select="none" dominant-baseline="central"
           @mousedown="dragStart(index, $event)"
-          class="piText"
+          :class="item.textSize"
           >{{item.text}}</text>
       </g>
       <!-- ドラッグ中のパイ型 -->

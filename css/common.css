@@ -14,6 +14,14 @@ input {
   animation-iteration-count: 3
 }
 
-.piText {
-  font-size: 6px;
+.size4 {
+  font-size: 4px;
+}
+
+.size10 {
+  font-size: 10px;
+}
+
+.size20 {
+  font-size: 20px;
 }

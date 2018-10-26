@@ -37,15 +37,23 @@ var vm = new Vue({
         var y1 = this.cy + this.r * Math.sin(-(i + 1) * th);
         var d = this.d([this.cx, this.cy, x0, y0, x1, y1]);
         var fill = hsvToRgb(i * 360 / this.numbers.length, 1, 1);
-        var textX = this.cx + this.r * 0.9 * Math.cos(-(i + 0.5) * th);
-        var textY = this.cy + this.r * 0.9 * Math.sin(-(i + 0.5) * th);
+        var textX = this.cx + this.r * 0.8 * Math.cos(-(i + 0.5) * th);
+        var textY = this.cy + this.r * 0.8 * Math.sin(-(i + 0.5) * th);
+        var textSize = "size20";
+        if (this.numbers.length > 6) {
+          textSize = "size10";
+        }
+        if (this.numbers.length > 20) {
+          textSize = "size4";
+        }
         items.push(
           {
             d: d,
             fill: fill,
             textX: textX,
             textY: textY,
-            text: this.numbers[i]
+            text: this.numbers[i],
+            textSize: textSize
           }
         );
       }
