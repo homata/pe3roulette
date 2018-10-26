@@ -13,7 +13,7 @@ var vm = new Vue({
     dragPos: [],
     focusItem: null,
     focusIndex: 0,
-    interval: 50,
+    interval: 10,
     editing: false,
     status: "stop"  // stop / running / breaking / pause
   },
@@ -144,7 +144,7 @@ var vm = new Vue({
           self.focusItem = self.items[self.focusIndex].d;
           // ブレーキ中はインターバルを増やしていく
           if (self.status == "breaking") {
-            self.interval += 12;
+            self.interval += 8;
           }
           // ルーレット一時停止
           if (self.interval > 480) {
