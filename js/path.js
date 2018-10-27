@@ -138,12 +138,12 @@ var vm = new Vue({
       if (this.status == "running") return;
       if (this.dragIndex == -1) return;
       var currentPos = this.getSvgPos(event);
-      this.dragPos = [];
-      this.dragIndex = -1;
       if (this.isOut(currentPos.x, currentPos.y)) {
         // 円の外なら削除
         this.numbers.splice(this.dragIndex, 1);
       }
+      this.dragPos = [];
+      this.dragIndex = -1;
     },
     switchRoulette: function(event) {
       // ルーレット停止または一時停止
