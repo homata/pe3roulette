@@ -6,12 +6,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/common.css"  />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
 </head>
 <body>
-  <div id="roulette" style="margin: 100px;">
+  <div id="roulette">
     <!-- Use the component -->
-    <svg id="mysvg" viewBox="0 0 200 100"
+    <svg
+      id="mysvg"
+      viewBox="0 0 200 120"
       @mousemove="drag($event)"
       @mouseup="dragStop($event)">
       <!-- パイの切れ端 -->
@@ -22,16 +24,25 @@
           stroke="#d8d8d8"
           stroke-width="0.5"
           @mousedown="dragStart(index, $event)"
+          @mouseenter="startMouseOverPie(index)"
+          @mouseleave="finishMouseOverPie(index)"
           />
         <text
-          :x="item.textX" :y="item.textY" text-anchor="middle"
-          user-select="none" dominant-baseline="central"
-          @mousedown="dragStart(index, $event)"
+          :x="item.textX"
+          :y="item.textY"
           :class="item.textSize"
-          >{{item.text}}</text>
+          text-anchor="middle"
+          user-select="none"
+          dominant-baseline="central"
+          @mousedown="dragStart(index, $event)"
+          @mouseenter="startMouseOverPie(index)"
+          @mouseleave="finishMouseOverPie(index)">
+          {{item.text}}
+        </text>
       </g>
       <!-- ドラッグ中のパイ型 -->
-      <path :fill="dragItem.fill"
+      <path
+        :fill="dragItem.fill"
         stroke="#d8d8d8"
         stroke-width="0.5"
         opacity="0.5"
@@ -46,16 +57,47 @@
         opacity="0.9"
         :d="focusItem"
         />
-      <!-- ルーレットスイッチ -->
-      <circle :cx="cx" :cy="cy" :r="sr" fill="#d8d8d8" stroke-width="0.5" stroke="white" @mouseup="switchRoulette" />
+      <!-- 真ん中のルーレットスイッチ -->
+      <circle
+        :cx="cx"
+        :cy="cy"
+        :r="sr"
+        :fill="fillSwitch"
+        stroke-width="0.5"
+        stroke="white"
+        @mouseup="switchRoulette"
+        @mouseenter="startMouseOverSwitch"
+        @mouseleave="finishMouseOverSwitch"
+        />
       <!-- 現在の数値 -->
-      <text v-if="showCurrent" :x="cx" :y="cy" text-anchor="middle"
-        user-select="none" dominant-baseline="central"
-        @mouseup="switchRoulette">{{items[focusIndex].text}}</text>
-      <!-- 確定数字 -->
-      <text v-if="showFixedNum" class="fixedNum animated flash faster" :x="cx" :y="cy"
-      text-anchor="middle"
-        user-select="none" dominant-baseline="central" @mouseup="switchRoulette">{{items[focusIndex].text}}</text>
+      <text
+        v-if="showCurrent"
+        :x="cx"
+        :y="cy"
+        text-anchor="middle"
+        user-select="none"
+        dominant-baseline="central"
+        @mouseup="switchRoulette"
+        @mouseenter="startMouseOverSwitch"
+        @mouseleave="finishMouseOverSwitch"
+        >
+        {{items[focusIndex].text}}
+      </text>
+      <!-- 確定した数字 -->
+      <text
+        v-if="showFixedNum"
+        :x="cx"
+        :y="cy"
+        class="fixedNum animated flash faster"
+        text-anchor="middle"
+        user-select="none"
+        dominant-baseline="central"
+        @mouseup="switchRoulette"
+        @mouseenter="startMouseOverSwitch"
+        @mouseleave="finishMouseOverSwitch"
+        >
+        {{items[focusIndex].text}}
+      </text>
     </svg>
     <!-- 数字入力 -->
     <center>

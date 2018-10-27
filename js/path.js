@@ -1,21 +1,22 @@
 var vm = new Vue({
   el: '#roulette',
   data: {
-    cx: 100,
-    cy: 50,
-    r: 50,
-    sr: 20,
-    number: 10,
-    numbers: [1,2,3,4,5,6,7,8,9,10],
-    dragStartPos: {x: 0, y: 0},
-    movePos: {x: 0, y: 0},
-    dragIndex: -1,
-    dragPos: [],
-    focusItem: null,
-    focusIndex: 0,
-    interval: 10,
-    editing: false,
-    status: "stop"  // stop / running / breaking / pause
+    cx: 100,    // 円の中心座標
+    cy: 60,     // 円の中心座標
+    r: 50,      // 円の半径
+    sr: 20,     // スイッチの半径
+    number: 10, // 数字の数
+    numbers: [1,2,3,4,5,6,7,8,9,10],  // 残っている数
+    dragStartPos: {x: 0, y: 0}, // パイのドラッグ量計算用
+    movePos: {x: 0, y: 0},      // パイのドラッグ量計算用
+    dragIndex: -1,              // パイのドラッグ量計算用
+    dragPos: [],                // パイのドラッグ量計算用
+    focusItem: null,  // 回るフォーカス
+    focusIndex: 0,    // 回るフォーカス
+    interval: 10,     // 回るフォーカス
+    status: "stop",   // stop / running / breaking / pause
+    vSwitch: 0.84,    // スイッチの色の濃さ
+    highlightPieIndex: -1 // ハイライトされたパイのインデックス
   },
   watch: {
     number: function(newValue, oldValue) {
@@ -36,7 +37,11 @@ var vm = new Vue({
         var x1 = this.cx + this.r * Math.cos(-(i + 1) * th);
         var y1 = this.cy + this.r * Math.sin(-(i + 1) * th);
         var d = this.d([this.cx, this.cy, x0, y0, x1, y1]);
-        var fill = hsvToRgb(i * 360 / this.numbers.length, 1, 1);
+        var v = 0.9;
+        if (this.highlightPieIndex == i) {
+          v = 1.0;
+        }
+        var fill = hsvToRgb(i * 360 / this.numbers.length, 1, v);
         var textX = this.cx + this.r * 0.8 * Math.cos(-(i + 0.5) * th);
         var textY = this.cy + this.r * 0.8 * Math.sin(-(i + 0.5) * th);
         var textSize = "size20";
@@ -90,6 +95,10 @@ var vm = new Vue({
     },
     canEdit: function() {
       return this.status == "stop";
+    },
+    // スイッチの色
+    fillSwitch: function() {
+      return hsvToRgb(0, 0, this.vSwitch);
     }
   },
   methods: {
@@ -129,10 +138,11 @@ var vm = new Vue({
       if (this.status == "running") return;
       if (this.dragIndex == -1) return;
       var currentPos = this.getSvgPos(event);
+      this.dragPos = [];
+      this.dragIndex = -1;
       if (this.isOut(currentPos.x, currentPos.y)) {
-        this.dragPos = [];
+        // 円の外なら削除
         this.numbers.splice(this.dragIndex, 1);
-        this.dragIndex = -1;
       }
     },
     switchRoulette: function(event) {
@@ -143,6 +153,11 @@ var vm = new Vue({
         this.status = "running";
         var self = this;
         setTimeout(function countDown() {
+          // ルーレット一時停止
+          if (self.interval > 480) {
+            self.status = "pause";
+            return;
+          }
           beep();
           if (self.focusIndex > 0) {
             self.focusIndex--;
@@ -153,11 +168,6 @@ var vm = new Vue({
           // ブレーキ中はインターバルを増やしていく
           if (self.status == "breaking") {
             self.interval += 8;
-          }
-          // ルーレット一時停止
-          if (self.interval > 480) {
-            self.status = "pause";
-            return;
           }
           setTimeout(countDown, self.interval);
         }, this.interval);
@@ -178,6 +188,20 @@ var vm = new Vue({
       pt.x = event.clientX;
       pt.y = event.clientY;
       return pt.matrixTransform(svg.getScreenCTM().inverse());
+    },
+    startMouseOverSwitch: function() {
+      this.vSwitch += 0.1;
+    },
+    finishMouseOverSwitch: function() {
+      this.vSwitch -= 0.1;
+    },
+    startMouseOverPie: function(index) {
+      if (this.status == "stop" || this.status == "pause") {
+        this.highlightPieIndex = index;
+      }
+    },
+    finishMouseOverPie: function(index) {
+      this.highlightPieIndex = -1;
     }
   }
 });
