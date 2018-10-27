@@ -121,7 +121,6 @@ var vm = new Vue({
       if (this.numbers.length == 2) return;
       this.dragStartPos = this.getSvgPos(event);
       this.movePos = {x: 0, y: 0};
-      console.log(index);
       this.dragIndex = index;
       this.dragPos = this.parseD(this.items[index].d);
     },
@@ -203,7 +202,6 @@ var vm = new Vue({
     },
     finishMouseOverPie: function(index) {
       this.highlightPieIndex = -1;
-      console.log(this.numbers);
     }
   }
 });
