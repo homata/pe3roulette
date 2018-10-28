@@ -16,7 +16,8 @@ var vm = new Vue({
     interval: 10,     // 回るフォーカス
     status: "stop",   // stop / running / breaking / pause
     vSwitch: 0.84,    // スイッチの色の濃さ
-    highlightPieIndex: -1 // ハイライトされたパイのインデックス
+    highlightPieIndex: -1, // ハイライトされたパイのインデックス
+    jitterBase: [-3, -2, -1, 0, 1, 2, 3],
   },
   watch: {
     number: function(newValue, oldValue) {
@@ -142,6 +143,10 @@ var vm = new Vue({
         // 円の外なら削除
         this.numbers.splice(this.dragIndex, 1);
       }
+      // 削除によってフォーカス対象がなくなったときのための処理
+      if (this.focusIndex > this.items.length - 1) {
+        this.focusIndex = this.items.length - 1;
+      }
       this.dragPos = [];
       this.dragIndex = -1;
     },
@@ -151,10 +156,11 @@ var vm = new Vue({
         // ルーレット開始
         this.interval = 50;
         this.status = "running";
+        var jitter = this.jitterBase[Math.floor(Math.random() * 7)];
         var self = this;
         setTimeout(function countDown() {
           // ルーレット一時停止
-          if (self.interval > 480) {
+          if (self.interval > 400) {
             self.status = "pause";
             return;
           }
@@ -167,7 +173,7 @@ var vm = new Vue({
           self.focusItem = self.items[self.focusIndex].d;
           // ブレーキ中はインターバルを増やしていく
           if (self.status == "breaking") {
-            self.interval += 8;
+            self.interval += 16 + jitter;
           }
           setTimeout(countDown, self.interval);
         }, this.interval);
