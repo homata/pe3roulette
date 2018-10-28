@@ -15,7 +15,7 @@ input {
 }
 
 .size4 {
-  font-size: 4px;
+  font-size: 8px;
 }
 
 .size10 {
@@ -23,5 +23,5 @@ input {
 }
 
 .size20 {
-  font-size: 20px;
+  font-size: 16px;
 }
