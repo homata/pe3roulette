@@ -8,7 +8,12 @@
 <link rel="stylesheet" type="text/css" href="css/common.css"  />
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
 </head>
-<body>
+<body style="background-color:#ADD8E6">
+<div style="background: url(/assets/main-img.webp); background-size:cover;">
+<!--
+<div style="background: url(/assets/main-img.png) no-repeat 0% 0%;">
+<div class="bg">
+-->
   <div id="roulette">
     <!-- Use the component -->
     <svg
@@ -104,6 +109,7 @@
       <input v-model.number="number" v-if="canEdit">
     </center>
   </div>
+</div>
   <script src="js/beep.js"></script>
   <script src="js/color.js"></script>
   <script src="js/path.js"></script>

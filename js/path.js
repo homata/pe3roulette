@@ -25,7 +25,7 @@ var vm = new Vue({
       for (var i = 0; i < this.number; i++) {
         numbers.push(i+1);
       }
-      this.numbers = numbers;
+      this.numbers = this.shuffle(numbers);
     }
   },
   computed: {
@@ -51,6 +51,9 @@ var vm = new Vue({
         }
         if (this.numbers.length > 20) {
           textSize = "size4";
+        }
+        if (this.numbers.length >= 30) {
+          textSize = "size2";
         }
         items.push(
           {
@@ -103,6 +106,17 @@ var vm = new Vue({
     }
   },
   methods: {
+    shuffle: function(array) {
+        for(var i = (array.length - 1); 0 < i; i--){
+            // 0〜(i+1)の範囲で値を取得
+            var r = Math.floor(Math.random() * (i + 1));
+            // 要素の並び替えを実行
+            var tmp = array[i];
+            array[i] = array[r];
+            array[r] = tmp;
+        }
+        return array;
+    },
     d: function(pos) {
       return "M " + pos[0] + " " + pos[1] + " L " + pos[2] + " " + pos[3] + " A " + this.r + " " + this.r + " 0 0 0 " + pos[4] + " " + pos[5] + " Z";
     },
