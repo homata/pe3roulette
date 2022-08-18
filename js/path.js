@@ -1,3 +1,24 @@
+var numbers_init = function(number) {
+    var numbers = [];
+    for (var i = 0; i < number; i++) {
+        numbers.push(i+1);
+    }
+    return shuffle(numbers);
+}
+
+var shuffle = function(array) {
+    for(var i = (array.length - 1); 0 < i; i--){
+        // 0〜(i+1)の範囲で値を取得
+        var r = Math.floor(Math.random() * (i + 1));
+        // 要素の並び替えを実行
+        var tmp = array[i];
+        array[i] = array[r];
+        array[r] = tmp;
+    }
+    return array;
+}
+const INIT_NUMBER = 57
+
 var vm = new Vue({
   el: '#roulette',
   data: {
@@ -5,8 +26,8 @@ var vm = new Vue({
     cy: 60,     // 円の中心座標
     r: 50,      // 円の半径
     sr: 20,     // スイッチの半径
-    number: 10, // 数字の数
-    numbers: [1,2,3,4,5,6,7,8,9,10],  // 残っている数
+    number: INIT_NUMBER, // 数字の数
+    numbers: numbers_init(INIT_NUMBER),
     dragStartPos: {x: 0, y: 0}, // パイのドラッグ量計算用
     movePos: {x: 0, y: 0},      // パイのドラッグ量計算用
     dragIndex: -1,              // パイのドラッグ量計算用
@@ -21,11 +42,7 @@ var vm = new Vue({
   },
   watch: {
     number: function(newValue, oldValue) {
-      var numbers = [];
-      for (var i = 0; i < this.number; i++) {
-        numbers.push(i+1);
-      }
-      this.numbers = this.shuffle(numbers);
+      this.numbers = numbers_init(this.number)
     }
   },
   computed: {
@@ -106,17 +123,6 @@ var vm = new Vue({
     }
   },
   methods: {
-    shuffle: function(array) {
-        for(var i = (array.length - 1); 0 < i; i--){
-            // 0〜(i+1)の範囲で値を取得
-            var r = Math.floor(Math.random() * (i + 1));
-            // 要素の並び替えを実行
-            var tmp = array[i];
-            array[i] = array[r];
-            array[r] = tmp;
-        }
-        return array;
-    },
     d: function(pos) {
       return "M " + pos[0] + " " + pos[1] + " L " + pos[2] + " " + pos[3] + " A " + this.r + " " + this.r + " 0 0 0 " + pos[4] + " " + pos[5] + " Z";
     },
