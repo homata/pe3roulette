@@ -17,7 +17,7 @@ var shuffle = function(array) {
     }
     return array;
 }
-const INIT_NUMBER = 57
+const INIT_NUMBER = 16
 
 var vm = new Vue({
   el: '#roulette',
